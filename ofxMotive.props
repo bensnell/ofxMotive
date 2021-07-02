@@ -1,16 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup Label="PropertySheets" />
-  <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup>
+    <OFXMOTIVE_ROOT Condition="'$(OFXMOTIVE_ROOT)'==''">$(MSBuildThisFileDirectory)</OFXMOTIVE_ROOT>
+  </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(NPTRACKINGTOOLS_INC);$(NP_FIRST_PARTY)\SharedLibraries\RigidBodySolver\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(OFXMOTIVE_ROOT)\motive\inc;$(OFXMOTIVE_ROOT)\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(NPTRACKINGTOOLS_LIB);C:\Program Files\OptiTrack\Motive;C:\Program Files\OptiTrack\Motive\plugins\platforms;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OFXMOTIVE_ROOT)\motive\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>NPTrackingToolsx64.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Filter Include="local_addons" />
+    <Filter Include="local_addons\ofxMotive" />
+    <Filter Include="local_addons\ofxMotive\src" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveMarker.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveCamera.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveCameraSettings.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveCameraSet.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotive.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveReconstruction.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+    <ClCompile Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveStatus.cpp">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveMarker.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveCamera.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveCameraSettings.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveCameraSet.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotive.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveReconstruction.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+    <ClInclude Include="$(OFXMOTIVE_ROOT)\src\ofxMotiveStatus.h">
+      <Filter>local_addons\ofxMotive\src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+  	<ContentWithTargetPath Include="$(OFXMOTIVE_ROOT)\motive\bin\platforms\qwindows.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  		<TargetPath>platforms\qwindows.dll</TargetPath>
+  	</ContentWithTargetPath>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\avcodec-57.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\avfilter-6.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\avformat-57.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+   	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\avresample-3.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\avutil-55.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\libiomp5md.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\NPTrackingToolsx64.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\opencv_world330.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\python36.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5Core.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5Gui.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5Multimedia.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5Network.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5OpenGL.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5Svg.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\Qt5Widgets.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\qwindows.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\shiboken2.cp36-win_amd64.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\swscale-4.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\tbb.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  	<Content Include="$(OFXMOTIVE_ROOT)\motive\bin\ToolKitPro1521vc140x64U.dll">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  		<Visible>false</Visible>
+  	</Content>
+  </ItemGroup>
 </Project>

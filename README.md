@@ -6,61 +6,53 @@ This addon allows for easy access to Optitrack Motive's API for accessing 2D and
 
 ### Systems
 
-Since Motive only works in Windows, this addon has only been developed on Windows 10 with Visual Studios 2017.
+Since Motive only works in Windows, this addon has only been developed on Windows 10 with Visual Studios 2019.
 
 ### Dependencies
 
-1. [Motive API](https://optitrack.com/downloads/motive.html)
-2. [Camera SDK](https://optitrack.com/products/camera-sdk/)
+1. [Motive API](https://optitrack.com/downloads/motive.html) (v2.2.0)
 
 #### Installation
 
-1. Ensure Motive has been downloaded, installed and has a valid license. By default, its program files should be installed to `C:\Program Files\OptiTrack\Motive`
-2. Download the Camera SDK to a convenient location.
+1. Ensure that a valid license for Motive exists in the folder `C:\ProgramData\OptiTrack\License`. 
+
+   *Note: It is recommended that users install Motive to their computer in order to validate their license and generate accurate calibration files. However, Motive does not need to be installed for this addon to work, since all Motive v2.2.0 headers, libs and dlls have already been included in the folder `motive`.* By default, Motive installs to the directory `C:\Program Files\OptiTrack\Motive`.
 
 ## How to use this addon with your project
 
-1. Add this addon to your addons file
-2. Generate your OF project with the Project Generator
-3. Include the appropriate headers and libraries in your addon. There are two ways to do this:
-   1. Property Sheets: The Easy Way
-      1. Open the *Property Manager* under *View > Other Windows > Property Manager*
-      2. For every configuration (e.g. 'Debug | x64') under your project (e.g. 'example-with -RUI'), right click on the configuration and choose *Add Existing Property Sheet*
-      3. Navigate to the ofxMotive addon directory and select *ofxMotive.props* 
-   2. Manually Editing Properties: The Hard Way
-      1. In Visual Studio, click on your project in the Solution Explorer, the click the wrench icon at the top to edit its Properties. Set *Configuration* to *All Configurations* and *Platform* to *All Platforms*
-      2. Under *Configuration Properties > C/C++ > General > Additional Include Directories*, add
-         - `$(NPTRACKINGTOOLS_INC)` (this resolves into `C:\Program Files\OptiTrack\Motive\inc`)
-         - `$(NP_FIRST_PARTY)\SharedLibraries\RigidBodySolver\Include` (this resolves into `\SharedLibraries\RigidBodySolver\Include`)
-      3. Under *Configuration Properties > Linker > General > Additional Include Directories*, add 
-         - `$(NPTRACKINGTOOLS_LIB)` (this should resolve into `C:\Program Files\OptiTrack\Motive\lib`)
-         - `C:\Program Files\OptiTrack\Motive`
-         - `C:\Program Files\OptiTrack\Motive\plugins\platforms`
-      4. Under *Configuration Properties > Linker > Input*, add 
-         - `NPTrackingToolsx64.lib` for a 64 bit architecture
-4. Copy all files from the folder within this addon titled *Motive2.1 Required Libraries* into your project's executable directory (*bin*). The files that will be copied include those in the below image. It is crucial for these files to be accessible at the same file structure level as the executable itself. For more information, [see this page](https://v21.wiki.optitrack.com/index.php?title=Motive_API:_Quick_Start_Guide#Library_Files).
-
-![](https://v21.wiki.optitrack.com/images/6/6a/MotiveAPI_RequiredLIB.png)
+1. Add this addon to your addons file.
+2. Generate your OF project with the Project Generator.
+3. Include the `ofxMotive.props` property sheet. You can do this by opening the project in Visual Studios, navigating to the *Property Manager* window (under *View > Other Windows > Property Manager*), right clicking on your project and selecting *Add Existing Property Sheet*. Select the file *ofxMotive.props* included in this repo.
+4. Add your Motive calibration (`.cal`) and profile (`.motive`) files to your project's `bin/data` folder. By default, ofxMotive looks for `calibration.cal` and `profile.motive`. If your files are named differently, you can either rename to match the default, or change the paths with ofxRemoteUI.
 
 ## Troubleshooting
 
 ##### Poco Include Errors
 
-Sometimes, Project Generator includes the Poco addon's libraries, instead of OpenFramework's libraries. There are two ways to fix these errors:
+Sometimes, Project Generator includes the Poco addon's libraries, instead of OpenFramework's libraries. Here's how to fix it:
 
-1. Property Sheets: The Easy Way
-   1. Open the *Property Manager* under *View > Other Windows > Property Manager*
-   2. For every configuration (e.g. 'Debug | x64') under your project (e.g. 'example-with -RUI'), right click on the configuration and choose *Add Existing Property Sheet*
-   3. Navigate to the ofxMotive addon directory and select *ofxPoco.props* 
-2. Manually Editing Properties: The Hard Way
-   1. In Project Properties > Configuration Properties > C/C++  > Additional Include Directories, include:
-      - `$(OF_ROOT)\libs\poco\include`
-   2. In Project Properties > Configuration Properties > Linker > Additional Include Directories, include:
-      1. `$(OF_ROOT)\libs\poco\lib\vs`
-      2. `$(OF_ROOT)\libs\poco\lib\vs\x64\Debug`
-      3. `$(OF_ROOT)\libs\poco\lib\vs\x64\Release`
-      4. `$(OF_ROOT)\libs\poco\lib\vs\Win32\Debug`
-      5. `$(OF_ROOT)\libs\poco\lib\vs\Win32\Release`
+1. In Project Properties > Configuration Properties > C/C++  > Additional Include Directories, include:
+   - `$(OF_ROOT)\libs\poco\include`
+2. In Project Properties > Configuration Properties > Linker > Additional Include Directories, include:
+   1. `$(OF_ROOT)\libs\poco\lib\vs`
+   2. `$(OF_ROOT)\libs\poco\lib\vs\x64\Debug`
+   3. `$(OF_ROOT)\libs\poco\lib\vs\x64\Release`
+   4. `$(OF_ROOT)\libs\poco\lib\vs\Win32\Debug`
+   5. `$(OF_ROOT)\libs\poco\lib\vs\Win32\Release`
+
+##### Cannot Find NPTrackingToolsx64.lib
+
+Motive requires that a number of dll's and lib's are copied into the bin folder, alongside your executable. A Post-Build Step in the ofxMotive.props file should complete this task. However, if after building, you notice that this lib and the others below are not in your bin folder, then complete these steps manually:
+
+1. Copy all files from the folder *motive > bin* into your project's executable directory (*bin*). The files that will be copied include those in the below image. It is crucial for these files to be accessible at the same file structure level as the executable itself. For more information, [see this page](https://v21.wiki.optitrack.com/index.php?title=Motive_API:_Quick_Start_Guide#Library_Files).
+
+![](https://v21.wiki.optitrack.com/images/6/6a/MotiveAPI_RequiredLIB.png)
+
+##### Even with an eSync, cameras are not all in sync
+
+Make sure all of your cables are connected. The ethernet cable from your computer to your network switch should be connected on the switch's 10G port (as opposed to a slower 1G port).
+
+The network switch should have the StormControl feature disabled. If needed, check your switch settings to make sure it is disabled. If not, it will delay network traffic to prevent "storms" of messages. 
 
 ## Reference
 

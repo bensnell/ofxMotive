@@ -110,7 +110,11 @@ Desktop.ini
 # Visual Studio things
 /.vs/
 
-
 # Libs for motive in the bin folder of any examples
 /example*/bin/
 *.VC.db
+
+# Include the motive libs
+!motive/inc/*
+!motive/bin/*
+!motive/inc/*

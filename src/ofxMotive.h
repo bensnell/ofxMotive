@@ -13,9 +13,9 @@
 //#endif
 
 #include "ofxRemoteUIServer.h"
-#include "MotiveCameraSet.h"
-#include "Reconstruction.h"
-#include "Identification.h"
+#include "ofxMotiveCameraSet.h"
+#include "ofxMotiveReconstruction.h"
+#include "ofxMotiveStatus.h"
 
 enum MotiveState {
 	MOTIVE_DISCONNECTED = 0,
@@ -24,15 +24,25 @@ enum MotiveState {
 };
 
 // The information output from this addon
-struct MotiveOutput {
+struct MotiveOutputMarker {
 	glm::vec3 position;
-	int ID;
+	Core::cUID cuid;
+};
+
+struct MotiveOutputCamera {
+	glm::vec3 position;
+	glm::quat orientation;
+	int ID = -1;		// displayed on camera LED screen
+	int serial = -1;	// hardware serial number (unique to camera)
+	bool maybeNeedsCalibration = false;
 };
 
 // The event args output
 class MotiveEventArgs : public ofEventArgs {
 public:
-	vector<MotiveOutput> markers;
+	vector<MotiveOutputMarker> markers;
+	vector<MotiveOutputCamera> cameras;
+	bool maybeNeedsCalibration = false;
 };
 
 class ofxMotive : private ofThread {
@@ -71,13 +81,20 @@ public:
 	vector<glm::vec2> get2DPoints(int camID);
 
 	/// \brief Get the reconstructed 3D points
-	vector<MotiveOutput> get3DPoints(); // this is the output
+	vector<MotiveOutputMarker> get3DPoints(); // this is the output
 
 	/// \brief Draw any debug info
 	//void drawDebugInfo();
 
 	// Event that occurs when new data is received
 	ofEvent< MotiveEventArgs > newDataReceived;
+
+	// Is it possible that motive needs to be re-calibrated?
+	bool maybeNeedsCalibration();
+
+	// Get the maximum frame rate.
+	// Note: This may change depending on which cameras are connected
+	int getMaxFPS() { return cameras.getMaxFPS(); }
 
 private:
 
@@ -96,8 +113,6 @@ private:
 	void threadedFunction();
 	bool bBlocking = true;
 
-	//CameraList cams;
-
 	void startTryConnect();
 	long lastTryConnectTime = 0;
 	int tryConnectTimestep = 3000; // every 3 seconds
@@ -107,15 +122,38 @@ private:
 
 	bool bForceDisconnect = false;
 
-	string profilePath = ""; // should be a .motive file (actually xml)
+	string profilePath = ofToDataPath("profile.motive");; // should be a .motive file (actually xml)
+	bool bLoadDefaultProfile = false; // default is located in C:/ProgramData/Optitrack
 	bool bForceLoadProfile = false;
 	bool loadProfile();
 	bool bSaveProfile = false;
 	bool saveProfile();
+	string getDefaultProfilePath();
 
-	string calibrationPath = ""; // should be a .cal file
+	// Should we override the setting concerning continuous calibration
+	// stored in the profile?
+	bool bOverrideContinuousCalibration = false;
+	enum ContinuousCalibrationType {
+		DISABLED = 0,
+		CONTINUOUS,
+		CONTINUOUS_AND_BUMPED_CAMERA,
+		NUM_TYPES
+	};
+	vector<string> getContinuousCalibrationTypes() {
+		return { "Disabled","Continuous","Continuous + Bumped Camera" };
+	}
+	ContinuousCalibrationType continuousCalibrationType = ContinuousCalibrationType::DISABLED;
+	bool getOverrideProfile(string refProfilePath, string& outProfilePath);
+	string getContinuousCalibrationTypeDescription(ContinuousCalibrationType type) {
+		auto types = getContinuousCalibrationTypes();
+		return types[int(type) % types.size()];
+	}
+
+	string calibrationPath = ofToDataPath("calibration.cal");; // should be a .cal file
+	bool bLoadDefaultCalibration = false; // default is located in C:/ProgramData/Optitrack/Motive
 	bool bForceLoadCalibration = false;
 	bool loadCalibration();
+	string getDefaultCalibrationPath();
 
 	bool initialize();
 	bool update(bool bSingleFrame = false);
@@ -128,16 +166,9 @@ private:
 
 	bool bFlushCameraQueues = false;
 
-	Reconstruction reconstruction;
+	MotiveReconstruction reconstruction;
 
-	Identification identification;
-
-	// save the output to a vector to be accessed by an external thread
-	//void prepareOutput();
-	// The output of this addon (should this be a queue?)
-	//vector<MotiveOutput> output;
-	
-	
-
+	MotiveStatus* status;
 
 };
+

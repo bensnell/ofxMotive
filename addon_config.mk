@@ -15,11 +15,11 @@
 # and the PG will write to the console the kind of error and in which line it is
 
 meta:
-	ADDON_NAME = ofxAddonTemplate
-	ADDON_DESCRIPTION = ofxAddonTemplate is amazing!
-	ADDON_AUTHOR = @yournamehere
-	ADDON_TAGS = "addon" "template"
-	ADDON_URL = http://github.com/yournamehere/ofxAddonTemplate
+	ADDON_NAME = ofxMotive
+	ADDON_DESCRIPTION = Motion Capture Optical Tracking with Optitrack Motive API
+	ADDON_AUTHOR = @bensnell
+	ADDON_TAGS = "optical" "motion" "capture" "optitrack" "motive" "tracking" "API"
+	ADDON_URL = http://github.com/local-projects/ofxMotive
 
 common:
 	# dependencies with other addons, a list of them separated by spaces 
